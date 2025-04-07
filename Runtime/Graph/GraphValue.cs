@@ -2,55 +2,54 @@ using System;
 
 namespace Anymotion.Graph
 {
-    [Serializable]
-    public struct GraphValue<T> where T : unmanaged
+    public struct GraphInput<T> where T : unmanaged
     {
-        public enum ValueMode
-        {
-            /// <summary>
-            /// A constant value defined in the graph.
-            /// </summary>
-            Constant,
-            /// <summary>
-            /// A value obtained after the execution of some node
-            /// </summary>
-            Node,
-            /// <summary>
-            /// 
-            /// </summary>
-            Persistent
-        }
-        
-        private T _defaultValue;
-        private ValueMode _valueMode;
-        private int _nodeId;
-        private int _nodeValueId;
-        private int _persistentId;
-        private T _value;
         private bool _hasValue;
+        private int _graphId;
+        private int _nodeId;
+        private T _value;
+
+        public T Value
+        {
+            get
+            {
+                if (!_hasValue && _graphId != -1)
+                    EvaluateValueFromNode();
+
+                return _value;
+            }
+        }
+
+        internal void SetValue(T value)
+        {
+            _value = value;
+        }
+
+        internal void EvaluateValueFromNode()
+        {
+            
+        }
+    }
+    
+    public struct GraphOutput<T> where T : unmanaged
+    {
+        private bool _hasValue;
+        private T _value;
 
         public T Value
         {
             get
             {
                 if (!_hasValue)
-                    ProcessValue();
-                
+                    throw new Exception("Output not set");
+
                 return _value;
             }
             set
             {
-                if (_valueMode != ValueMode.Persistent)
-                    return;
-                
-                _value = value;
                 _hasValue = true;
+                _value = value;
             }
-        }
-
-        private void ProcessValue()
-        {
-            throw new NotImplementedException();
         }
     }
 }

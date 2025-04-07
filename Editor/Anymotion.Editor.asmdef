@@ -1,6 +1,6 @@
 {
     "name": "Anymotion.Editor",
-    "rootNamespace": "",
+    "rootNamespace": "Anymotion",
     "references": [],
     "includePlatforms": [
         "Editor"
